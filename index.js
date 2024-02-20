@@ -9,6 +9,9 @@ app.use(express.static('./assets'));
 //we need to use layouts before calling any other routes,
 //To tell app that we are using some sort of layout
 app.use(expressLayouts);
+//extract styles and scripts from sub pages into the layout
+app.set('layout extractStyles', true);
+app.set('layout extractScripts', true);
 
 //use express router
 app.use('/', require('./routes'));
