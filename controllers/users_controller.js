@@ -1,6 +1,6 @@
 module.exports.profile = function(req, res){
-    return res.render('profile',{
-        title: "Codeial Profile"
+    return res.render('users_profile',{
+        title: "User Profile"
     })
 }
 
