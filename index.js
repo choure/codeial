@@ -1,13 +1,18 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = 8000;
 const expressLayouts = require('express-ejs-layouts');
-const db = require('./config/mongoose');
+const db = require('./config/mongoose'); //setting up db connection beffore firing up express
+
+app.use(express.urlencoded());
+
+app.use(cookieParser());
 
 //use static files above layout
 app.use(express.static('./assets'));
 
-//we need to use layouts before calling any other routes,
+//use layouts before calling any other routes,
 //To tell app that we are using some sort of layout
 app.use(expressLayouts);
 //extract styles and scripts from sub pages into the layout
