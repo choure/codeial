@@ -5,9 +5,9 @@ const usersRouter = require('../controllers/users_controller');
 
 router.get('/profile', usersRouter.profile);
 
-router.get('/create_profile', usersRouter.createProfile);
-
 router.get('/sign-up', usersRouter.signup);
 router.get('/sign-in', usersRouter.signin);
+
+router.post('/create', usersRouter.create);
 
 module.exports = router;
