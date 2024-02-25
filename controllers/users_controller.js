@@ -6,6 +6,18 @@ module.exports.profile = function(req, res){
     })
 }
 
+module.exports.signup = function(req, res){
+    return res.render('user_sign_up',{
+        title: "Codeial | Sign Up"
+    });
+}
+
+module.exports.signin = function(req, res){
+    return res.render('user_sign_in',{
+        title: "Codeial | Sign In"
+    });
+}
+
 module.exports.create = function(req, res){
     //check whether password and confirm password are equal or not
     if(req.body.password != req.body.confirm_password){
@@ -26,14 +38,22 @@ module.exports.create = function(req, res){
     }).catch(err => {console.log('Error in finding user in signing up:', err);});
 }
 
-module.exports.signup = function(req, res){
-    return res.render('user_sign_up',{
-        title: "Codeial | Sign Up"
-    });
-}
-
-module.exports.signin = function(req, res){
-    return res.render('user_sign_in',{
-        title: "Codeial | Sign In"
-    });
+module.exports.createSession = function(req, res){
+    //steps to authenticate
+    //find the user
+    User.findOne({email: req.body.email}).then(function(user){
+        //handle user found
+        if(user){
+            //handle password which doesn't match
+            if(user.password != req.body.password){
+                return res.redirect('back');
+            }
+            //handle session creation
+            res.cookie('user_id', user.id);
+            return res.redirect('/users/profile');
+        }else{
+            //handle user not found
+            return res.redirect('back');
+        }
+    }).catch(err => {console.log('Error in finding user in signing in:', err);});
 }
