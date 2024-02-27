@@ -1,18 +1,30 @@
 const User = require('../models/user');
 
 module.exports.profile = function(req, res){
-    return res.render('users_profile',{
-        title: "User Profile"
-    })
+    //console.log(req.cookies.user_id);
+    if(req.cookies.user_id){
+        User.findById(req.cookies.user_id).then(function(user){
+            if(user){
+                return res.render('users_profile',{
+                    title: user.name + " | Codeial",
+                    user: user
+                });
+            }
+            
+            return res.redirect('/users/sign-in');
+        }).catch(function(err){console.log('Error in finding user with the user_id: ', err); return;});
+    }else{
+        return res.redirect('/users/sign-in');
+    }
 }
 
-module.exports.signup = function(req, res){
+module.exports.signUp = function(req, res){
     return res.render('user_sign_up',{
         title: "Codeial | Sign Up"
     });
 }
 
-module.exports.signin = function(req, res){
+module.exports.signIn = function(req, res){
     return res.render('user_sign_in',{
         title: "Codeial | Sign In"
     });
@@ -49,7 +61,7 @@ module.exports.createSession = function(req, res){
                 return res.redirect('back');
             }
             //handle session creation
-            res.cookie('user_id', user.id);
+            res.cookie('user_id', user._id);
             return res.redirect('/users/profile');
         }else{
             //handle user not found
