@@ -6,6 +6,18 @@ module.exports.profile = function(req, res){
     })
 }
 
+module.exports.signup = function(req, res){
+    return res.render('user_sign_up',{
+        title: "Codeial | Sign Up"
+    });
+}
+
+module.exports.signin = function(req, res){
+    return res.render('user_sign_in',{
+        title: "Codeial | Sign In"
+    });
+}
+
 module.exports.create = function(req, res){
     //check whether password and confirm password are equal or not
     if(req.body.password != req.body.confirm_password){
@@ -26,14 +38,7 @@ module.exports.create = function(req, res){
     }).catch(err => {console.log('Error in finding user in signing up:', err);});
 }
 
-module.exports.signup = function(req, res){
-    return res.render('user_sign_up',{
-        title: "Codeial | Sign Up"
-    });
-}
-
-module.exports.signin = function(req, res){
-    return res.render('user_sign_in',{
-        title: "Codeial | Sign In"
-    });
+//sign in and crete session for user
+module.exports.createSession = function(req, res) {
+    //TODO Later
 }
