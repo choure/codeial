@@ -40,5 +40,6 @@ module.exports.create = function(req, res){
 
 //sign in and crete session for user
 module.exports.createSession = function(req, res) {
-    //TODO Later
+    //redirect to codeial home
+    return res.redirect('/');
 }
