@@ -1,0 +1,14 @@
+footer {
+  display: flex;
+  background-color: #4a4949;
+  align-items: center; }
+  footer div {
+    color: white; }
+  footer ul {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    list-style: none; }
+    footer ul li a {
+      text-decoration: none;
+      color: white; }

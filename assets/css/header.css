@@ -1,0 +1,19 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  background-color: blue;
+  align-items: center; }
+  header #logo-text {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: white;
+    margin-left: 10px; }
+  header #header-links {
+    display: flex;
+    width: 150px;
+    justify-content: space-around;
+    list-style-type: none; }
+    header #header-links li a {
+      text-decoration: none;
+      font-size: 1.2rem;
+      color: white; }

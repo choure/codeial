@@ -1,0 +1,23 @@
+footer {
+    display: flex;
+    background-color: rgb(74, 73, 73);
+    align-items: center;
+
+    div {
+        color: white;
+    }
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        list-style: none;
+
+        li {
+            a {
+                text-decoration: none;
+                color: white;
+            }
+        }
+    }
+}
