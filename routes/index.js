@@ -7,7 +7,6 @@ console.log('router loaded...');
 
 //home routes
 router.get('/', homeController.home);
-router.get('/signup', homeController.signup);
 
 //users routes
 router.use('/users', require('./users'));
