@@ -5,7 +5,15 @@ module.exports.home = function (req, res){
     //res.cookie('user_id', 25);
 
     //populate user of each post
-    Post.find({}).populate('user').then(function(posts){
+    Post.find({})
+    .populate('user')
+    .populate({
+        path: 'comments',
+        populate: {
+            path: 'user'
+        }
+    })
+    .then(function(posts){
         return res.render('home', {
             title: "Codeial | Home",
             posts: posts
