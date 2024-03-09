@@ -28,7 +28,6 @@ module.exports.destroy = function(req, res){
         Post.findById(postId).then(function(post){
             if(post.user == req.user.id || comment.user == req.user.id) {
                 //comment.remove();
-                console.log('Post author goes in to delete...');
                 Comment.deleteOne({_id: req.params.id}).then(function(comment){
                     Post.findByIdAndUpdate(postId, {$pull: {comments: req.params.id}}).then(function(post){
                         return res.redirect('back');
