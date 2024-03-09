@@ -24,16 +24,20 @@ module.exports.create = function(req, res){
 
 module.exports.destroy = function(req, res){
     Comment.findById(req.params.id).then(function(comment){
-        if(comment.user == req.user.id){
-            let postId = comment.post;
-            //comment.remove();
-            Comment.deleteOne({_id: req.params.id}).then(function(comment){
-                Post.findByIdAndUpdate(postId, {$pull: {comments: req.params.id}}).then(function(post){
-                    return res.redirect('back');
-                }).catch(function(error){console.log('Error in finding and updating Post comments id, ', error); return;});
-            }).catch(function(error){console.log('Error in deleting comment: ', error); return;});
-        } else {
-            return res.redirect('back');
-        }
+        let postId = comment.post;
+        Post.findById(postId).then(function(post){
+            if(post.user == req.user.id || comment.user == req.user.id) {
+                //comment.remove();
+                console.log('Post author goes in to delete...');
+                Comment.deleteOne({_id: req.params.id}).then(function(comment){
+                    Post.findByIdAndUpdate(postId, {$pull: {comments: req.params.id}}).then(function(post){
+                        return res.redirect('back');
+                    }).catch(function(error){console.log('Error in finding and updating Post comments id, ', error); return;});
+                }).catch(function(error){console.log('Error in deleting comment: ', error); return;});
+            } else {
+                return res.redirect('back');
+            }
+        })
+        
     }).catch(function(error){console.log('Error in finding comment by given id when deleting: ', error); return;});
 }
