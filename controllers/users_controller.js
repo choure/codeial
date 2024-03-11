@@ -1,9 +1,13 @@
 const User = require('../models/user');
 
 module.exports.profile = function(req, res){
-    return res.render('users_profile',{
-        title: "User Profile"
-    })
+    User.findById(req.params.id).then(function(user){
+        return res.render('users_profile',{
+            title: user.name + "Profile",
+            profile_user: user
+        });
+    }).catch(function(err){console.log('Error finding user when fetching user profile: ', err);});
+    
 }
 
 module.exports.signUp = function(req, res){
