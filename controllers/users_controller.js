@@ -3,11 +3,23 @@ const User = require('../models/user');
 module.exports.profile = function(req, res){
     User.findById(req.params.id).then(function(user){
         return res.render('users_profile',{
-            title: user.name + "Profile",
+            title: "Profile Page",
             profile_user: user
         });
     }).catch(function(err){console.log('Error finding user when fetching user profile: ', err);});
     
+}
+
+module.exports.update = function(req, res){
+    //we don't want someone to fiddle with our system and update others profile
+    if(req.user.id == req.params.id){
+        //only if current logged in user matches with profile id
+        User.findByIdAndUpdate(req.params.id, req.body).then(function(user){
+            return res.redirect('back');
+        }).catch(function(err){console.log('Error in finding user and update info: ', err);});
+    }else{
+        return res.status(401).send('Unauthorized');
+    }
 }
 
 module.exports.signUp = function(req, res){
