@@ -69,6 +69,8 @@ module.exports.create = async function(req, res){
 
 //sign in and crete session for user
 module.exports.createSession = function(req, res) {
+    req.flash('success', 'Logged in successfully');
+
     //redirect to codeial home
     return res.redirect('/');
 }
@@ -77,9 +79,10 @@ module.exports.createSession = function(req, res) {
 module.exports.destroySession = function(req, res) {
     //provided to req by passport js to sign out and destroy session cookie
     req.logout(function(err) { 
-        if (err) { return next(err); }
-        //res.redirect('/');
-      }); 
-
-    return res.redirect('/');
+        if (err) { 
+            return next(err); 
+        }
+        req.flash('success', 'Logged out successfully');
+        return res.redirect('/');
+    }); 
 }

@@ -12,6 +12,18 @@
     <body>
         <%- include('_header'); %>
 
+        <% if(flash.success && flash.success.length>0) { %>
+            <h5>
+                <%= flash.success %>
+            </h5>
+        <% } %>
+
+        <% if(flash.error && flash.error.length>0) { %>
+            <h5>
+                <%= flash.error %>
+            </h5>
+        <% } %>
+
         <main id="layout-main">
             <%- body %>
         </main>
