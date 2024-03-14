@@ -15,9 +15,14 @@ module.exports.update = function(req, res){
     if(req.user.id == req.params.id){
         //only if current logged in user matches with profile id
         User.findByIdAndUpdate(req.params.id, req.body).then(function(user){
+            req.flash('success', 'Updated!');
             return res.redirect('back');
-        }).catch(function(err){console.log('Error in finding user and update info: ', err);});
+        }).catch(function(err){
+            req.flash('error', err);
+            return res.redirect('back');
+        });
     }else{
+        req.flash('error', 'Unauthorized!');
         return res.status(401).send('Unauthorized');
     }
 }
@@ -46,6 +51,7 @@ module.exports.create = async function(req, res){
     try{
         //check whether password and confirm password are equal or not
         if(req.body.password != req.body.confirm_password){
+            req.flash('error', 'Passwords do not match');
             return res.redirect('back');
         }
         //Try to find user_id if it exists render back,
@@ -55,15 +61,18 @@ module.exports.create = async function(req, res){
         //if user doesn't exist, create a new user
         if(!user){
             let user = await User.create(req.body);
+
+            req.flash('success', 'Profile created successfully!');
             
             return res.redirect('/users/sign-in');
         }else{
             //if it is already exists, redirect back to sign up page
+            req.flash('success', 'You have signed up, login to continue!');
             return res.redirect('back');
         }
     }catch(err){
-        console.log('Error: ' + err);
-        return;
+        req.flash('error', err);
+        return res.redirect('back');
     }
 }
 
