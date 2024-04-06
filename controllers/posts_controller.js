@@ -9,10 +9,11 @@ module.exports.create = async function(req, res) {
         });
 
         if(req.xhr){
-            let the_post = await Post.find(post).populate('user');
+            // if we want to populate just the name of the user (we'll not want to send the password in the API), this is how we do it!
+            post = await post.populate([{path: 'user', select: 'name'}]);
             return res.status(200).json({
                 data: {
-                    post: the_post
+                    post: post
                 },
                 message: "Post created!"
             });

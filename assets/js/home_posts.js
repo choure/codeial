@@ -11,9 +11,7 @@
                 url: '/posts/create',
                 data: newPostForm.serialize(),
                 success: function(data){
-                    // console.log(data.data.post[0].user.name);
-                    // new post is in form of array with single object
-                    let newPost = newPostDom(data.data.post[0]);
+                    let newPost = newPostDom(data.data.post);
                     $('#posts-list-container>ul').prepend(newPost);
 
                     //to hndle delete for newly created post from ajax request
