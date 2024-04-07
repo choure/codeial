@@ -15,6 +15,18 @@ module.exports.create = async function(req, res){
             post.comments.push(comment);
             await post.save();
 
+            if(req.xhr){
+                // Similar for comments to fetch user name
+                comment = await comment.populate([{path: 'user', select: 'name'}]);
+                console.log('Ajax request to comment sent!');
+                return res.status(200).json({
+                    data:{
+                        comment: comment
+                    },
+                    message: 'Comment created successfully.'
+                })
+            }
+
             req.flash('success', 'Comment published!');
 
             return res.redirect('/');
