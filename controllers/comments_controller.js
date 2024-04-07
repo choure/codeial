@@ -18,7 +18,6 @@ module.exports.create = async function(req, res){
             if(req.xhr){
                 // Similar for comments to fetch user name
                 comment = await comment.populate([{path: 'user', select: 'name'}]);
-                console.log('Ajax request to comment sent!');
                 return res.status(200).json({
                     data:{
                         comment: comment
@@ -50,6 +49,16 @@ module.exports.destroy = async function(req, res){
             await Comment.deleteOne({_id: req.params.id});
 
             await Post.findByIdAndUpdate(postId, {$pull: {comments: req.params.id}});
+
+            // send the comment id which was deleted back to the views
+            if(req.xhr){
+                return res.status(200).json({
+                    data: {
+                        comment_id: req.params.id
+                    },
+                    message: "Comment deleted successfully."
+                });
+            }
 
             req.flash('success', 'Comment deleted!');
 
