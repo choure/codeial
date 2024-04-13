@@ -28,6 +28,8 @@ app.use(cookieParser());
 
 //use static files above layout
 app.use(express.static('./assets'));
+// make the uploads path available to the browser
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 //use layouts before calling any other routes,
 //To tell app that we are using some sort of layout
