@@ -21,14 +21,15 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     avatar: {
+        // stores the path of file including filename
         type: String
     }
 }, {
     timestamps: true
 });
 
-
-//Configures the multer disk storage. It specifies the destination directory for uploaded files and generates a unique filename for each file.
+// how the file should be stored
+// Configures the multer disk storage. It specifies the destination directory for uploaded files and generates a unique filename for each file.
 // the callback (cb) is called to signal that the operation (determining the destination directory or generating the filename) has completed
 let storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -45,10 +46,11 @@ let storage = multer.diskStorage({
 //static - Static methods in Mongoose are methods that are associated with the model itself rather than with individual documents.
 
 //it will handle the uploading of a single file with the field name 'avatar' and store it using the configured disk storage.
-userSchema.static.uploadedAvatar = multer({storage: storage}).single('avatar');
+userSchema.statics.uploadedAvatar = multer({storage: storage}).single('avatar');
+
 // It simply assigns the AVATAR_PATH constant, which represents the path where user avatars will be stored, to the avatarPath property of the schema.
 // This property will be accessible when working with the User model (constructed from this schema) to easily retrieve the path where avatars are stored.
-userSchema.static.avatarPath = AVATAR_PATH;
+userSchema.statics.avatarPath = AVATAR_PATH;
 
 const User = mongoose.model('User', userSchema);
 

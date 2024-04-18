@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 module.exports.profile = function(req, res){
     User.findById(req.params.id).then(function(user){
@@ -10,17 +12,49 @@ module.exports.profile = function(req, res){
     
 }
 
-module.exports.update = function(req, res){
+module.exports.update = async function(req, res){
     //we don't want someone to fiddle with our system and update others profile
     if(req.user.id == req.params.id){
         //only if current logged in user matches with profile id
-        User.findByIdAndUpdate(req.params.id, req.body).then(function(user){
-            req.flash('success', 'Updated!');
-            return res.redirect('back');
-        }).catch(function(err){
+        try{
+            const user = await User.findById(req.params.id);
+
+            User.uploadedAvatar(req, res, async function(err){
+                if(err){console.log('*****Multer Error:', err);}
+
+                user.name = req.body.name;
+                user.email = req.body.email;
+
+                // Check if a new file was uploaded
+                if(req.file){
+                    // If user already has an avatar, delete the old avatar file
+                    if(user.avatar){
+                        fs.unlinkSync(path.join(__dirname, '..', user.avatar));
+                    }
+
+                    // Save the path of the uploaded file into the user's avatar field
+                    user.avatar = User.avatarPath + '/' + req.file.filename;
+                }
+
+                //The updated user object (including any changes to the avatar path) is saved back to the database 
+                await user.save();
+
+                return res.redirect('back');
+            });
+
+        }catch(err){
+            console.log('**Error while saving user profile**', err);
             req.flash('error', err);
             return res.redirect('back');
-        });
+        };
+
+        // User.findByIdAndUpdate(req.params.id, req.body).then(function(user){
+        //     req.flash('success', 'Updated!');
+        //     return res.redirect('back');
+        // }).catch(function(err){
+        //     req.flash('error', err);
+        //     return res.redirect('back');
+        // });
     }else{
         req.flash('error', 'Unauthorized!');
         return res.status(401).send('Unauthorized');
